@@ -6,6 +6,7 @@ Rectangle {
     id: root
     width: 360
     height: 360
+    x: 360
     color: "TRANSPARENT"
     clip: false
 

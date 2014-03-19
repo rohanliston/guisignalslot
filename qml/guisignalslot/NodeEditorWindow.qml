@@ -2,8 +2,8 @@ import QtQuick 2.0
 
 Rectangle {
     id: root
-    width: 1280
-    height: 720
+    width: 3000
+    height: 3000
 
     property int mouseX
     property int mouseY
