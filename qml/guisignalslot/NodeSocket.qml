@@ -26,7 +26,7 @@ Rectangle {
         },
         State {
             name: "HOVERING"
-            when: root.hovering
+            when: root.hovering && !root.connecting
             PropertyChanges { target: root; color: Qt.darker(root.initialColour) }
         },
         State {
