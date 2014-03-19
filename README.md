@@ -1,3 +1,3 @@
 # guisignalslot
 
-Qt/QML-based Node Editor. 
+Qt/QML-based Node Editor. More info coming soon. 
