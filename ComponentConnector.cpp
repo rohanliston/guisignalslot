@@ -34,16 +34,46 @@ void ComponentConnector::componentComplete()
             _customSignals.insert(currentMethod.name(), currentMethod);
         }
     }
+
+    int startOfCustomProperties = test->metaObject()->propertyOffset();
+    int propertyCount = test->metaObject()->propertyCount();
+
+    for (int i= startOfCustomProperties; i<propertyCount; ++i)
+    {
+        QMetaProperty currentProperty = test->metaObject()->property(i);
+        qDebug() << "Found custom property: " << currentProperty.name();
+        _customProperties.insert(currentProperty.name(), currentProperty);
+    }
+
+    for (int i= 0; i<startOfCustomProperties; ++i)
+    {
+        QMetaProperty currentProperty = test->metaObject()->property(i);
+        qDebug() << "Found inherited property: " << currentProperty.name();
+        _inheritedProperties.insert(currentProperty.name(), currentProperty);
+    }
+
     delete test;
 
     emit customSignalNamesChanged(customSignalNames());
     emit customSlotNamesChanged(customSlotNames());
+    emit customPropertyNamesChanged(customPropertyNames());
+    emit inheritedPropertyNamesChanged(customPropertyNames());
     update();
 }
 
 QStringList ComponentConnector::customSlotNames() const
 {
     return _customSlots.keys();
+}
+
+QStringList ComponentConnector::customPropertyNames() const
+{
+    return _customProperties.keys();
+}
+
+QStringList ComponentConnector::inheritedPropertyNames() const
+{
+    return _inheritedProperties.keys();
 }
 
 QStringList ComponentConnector::customSignalNames() const
