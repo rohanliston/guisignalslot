@@ -38,14 +38,14 @@ void ComponentConnector::componentComplete()
     int startOfCustomProperties = test->metaObject()->propertyOffset();
     int propertyCount = test->metaObject()->propertyCount();
 
-    for (int i= startOfCustomProperties; i<propertyCount; ++i)
+    for (int i = startOfCustomProperties; i < propertyCount; ++i)
     {
         QMetaProperty currentProperty = test->metaObject()->property(i);
         qDebug() << "Found custom property: " << currentProperty.name();
         _customProperties.insert(currentProperty.name(), currentProperty);
     }
 
-    for (int i= 0; i<startOfCustomProperties; ++i)
+    for (int i = 0; i < startOfCustomProperties; ++i)
     {
         QMetaProperty currentProperty = test->metaObject()->property(i);
         qDebug() << "Found inherited property: " << currentProperty.name();
