@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import ComponentConnector 1.0
+import TestClass 1.0
 
 Rectangle {
     id: root
@@ -22,6 +23,7 @@ Rectangle {
     ComponentConnector {
         id: connector
         componentName: "TestClass"
+        targetObject: TestClass {}
         anchors.fill: parent
 
         Rectangle {
