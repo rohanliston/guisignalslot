@@ -4,6 +4,10 @@ Rectangle {
     id: root
     width: 3000
     height: 3000
+    color: "#FFFFDD"
+
+    property real scaleFactor: 1.0
+    transform: Scale { origin.x: 0; origin.y: 0; xScale: root.scaleFactor; yScale: root.scaleFactor}
 
     property int mouseX
     property int mouseY
@@ -137,6 +141,15 @@ Rectangle {
             {
                 cancelCurrentConnection();
                 canvas.requestPaint();
+            }
+        }
+
+        onWheel: {
+            if (wheel.modifiers & Qt.ControlModifier) {
+                if (wheel.angleDelta.y > 0)
+                    root.scaleFactor*=1.1;
+                else
+                    root.scaleFactor*=0.9;
             }
         }
     }

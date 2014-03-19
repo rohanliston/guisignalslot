@@ -21,8 +21,8 @@ Rectangle {
                 id: view
                 width: parent.width
                 height: parent.height
-                contentHeight: editorWindow.height
-                contentWidth: editorWindow.width
+                contentHeight: editorWindow.height * editorWindow.scaleFactor
+                contentWidth: editorWindow.width * editorWindow.scaleFactor
                 clip: true
 
                 NodeEditorWindow {
@@ -53,5 +53,26 @@ Rectangle {
                 onSetPositionChanged: view.contentX=setPosition * (view.contentWidth-view.width);
             }
         }
+    }
+    Button {
+        id: zoomIn
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 15
+        anchors.topMargin: 5
+        width: 25
+        height: 25
+        text: "+"
+        onClicked: editorWindow.scaleFactor*=1.25
+    }
+    Button {
+        id: zoomOut
+        anchors.right: zoomIn.left
+        anchors.top: parent.top
+        anchors.topMargin: 5
+        width: 25
+        height: 25
+        text: "-"
+        onClicked: editorWindow.scaleFactor*=0.8
     }
 }
