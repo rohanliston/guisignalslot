@@ -92,11 +92,14 @@ Rectangle {
                 drag.target: root
                 drag.axis: Drag.XAndYAxis
                 drag.minimumX: 0
-                drag.maximumX: root.parent.width - root.width
+                drag.maximumX: root.parent.width //- root.width
                 drag.minimumY: 0
-                drag.maximumY: root.parent.height - root.height
+                drag.maximumY: root.parent.height //- root.height
                 propagateComposedEvents: true
-                onPositionChanged: root.mouseMovedOverNode(this, mouseX, mouseY)
+                onPositionChanged: {
+                    root.mouseMovedOverNode(this, mouseX, mouseY)
+                    root.parent.resetExtents();
+                }
             }
         }
     }

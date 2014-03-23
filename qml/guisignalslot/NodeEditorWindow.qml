@@ -2,8 +2,8 @@ import QtQuick 2.0
 
 Rectangle {
     id: root
-    width: 3000
-    height: 3000
+    width: 1024
+    height: 720
     color: "#FFFFDD"
 
     property real scaleFactor: 1.0
@@ -30,6 +30,26 @@ Rectangle {
         var nodeList = nodes;
         nodeList.push(instance);
         nodes = nodeList;
+    }
+
+    function resetExtents() {
+        for (var i = 0, size = nodes.length; i < size; i++)
+        {
+            var node = nodes[i];
+
+            var maxX = 0
+            var maxY = 0
+
+            if (node.x + node.width > maxX) {
+                maxX = node.x + node.width;
+            }
+            if (node.y + node.height > maxY) {
+                maxY = node.y + node.height;
+            }
+        }
+
+        if (maxX > 1024) root.width = maxX;
+        if (maxY > 720) root.height = maxY;
     }
 
     function socketClicked(socket) {
