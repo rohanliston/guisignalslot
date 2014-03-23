@@ -32,7 +32,8 @@ Rectangle {
         nodes = nodeList;
     }
 
-    function resetExtents() {
+    signal nodePositionChanged
+    onNodePositionChanged: {
         for (var i = 0, size = nodes.length; i < size; i++)
         {
             var node = nodes[i];

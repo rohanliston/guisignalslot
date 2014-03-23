@@ -20,6 +20,7 @@ Rectangle {
     signal socketClicked(Item socket)
     signal mouseMovedOverNode(Item node, int x, int y)
     signal mouseMovedOverSocket(Item socket, int x, int y)
+    signal positionChanged
 
     ComponentConnector {
         id: connector
@@ -98,7 +99,7 @@ Rectangle {
                 propagateComposedEvents: true
                 onPositionChanged: {
                     root.mouseMovedOverNode(this, mouseX, mouseY)
-                    root.parent.resetExtents();
+                    root.parent.nodePositionChanged()
                 }
             }
         }
