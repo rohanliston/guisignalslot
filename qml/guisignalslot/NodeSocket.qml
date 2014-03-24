@@ -7,14 +7,18 @@ Rectangle {
     color: {
         var result;
 
-        if(isConnecting())
+        if(hasInvalidConnectionHovering())
+            result = invalidConnectionColor;
+        else if(hasPotentialConnectionHovering())
+            result = potentialConnectionColor;
+        else if(isConnecting())
             result = connectingColor;
         else if(isConnected())
             result = connectedColor;
         else
             result = defaultColor;
 
-        if(hovering)
+        if(hovering || highlighted)
             result = Qt.lighter(result);
 
         return result;
@@ -26,10 +30,15 @@ Rectangle {
     property variant connectedSockets: []
 
     property color defaultColor: "GRAY"
-    property color connectingColor: "GRAY"
+    property color connectingColor: "BLACK"
+    property color potentialConnectionColor: "GREEN"
+    property color invalidConnectionColor: "RED"
     property color connectedColor: "GREEN"
     property bool connecting: false
+    property bool potentialConnectionHovering: false
+    property bool invalidConnectionHovering: false
     property bool hovering: false
+    property bool highlighted: false
 
     signal clicked
     signal entered
@@ -52,6 +61,14 @@ Rectangle {
         return state === "CONNECTED";
     }
 
+    function hasPotentialConnectionHovering() {
+        return state === "POTENTIAL_CONNECTION_HOVERING";
+    }
+
+    function hasInvalidConnectionHovering() {
+        return state === "INVALID_POTENTIAL_CONNECTION_HOVERING";
+    }
+
     function canConnectTo(otherSocket) {
         return (isInput() && otherSocket.isOutput()) || (isOutput() && otherSocket.isInput());
     }
@@ -60,10 +77,31 @@ Rectangle {
         var connectionList = root.connectedSockets;
         connectionList.push(socket);
         root.connectedSockets = connectionList;
+        highlightConnections(hovering);
     }
+
+    function highlightConnections(highlight) {
+        for(var i = 0; i < connectedSockets.length; i++) {
+            connectedSockets[i].highlighted = highlight;
+        }
+    }
+
+    onHoveringChanged: highlightConnections(hovering)
 
     state: "NORMAL"
     states: [
+        State {
+            name: "INVALID_POTENTIAL_CONNECTION_HOVERING"
+            when: root.invalidConnectionHovering === true
+        },
+        State {
+            name: "POTENTIAL_CONNECTION_HOVERING"
+            when: root.potentialConnectionHovering === true
+        },
+        State {
+            name: "CONNECTING"
+            when: root.connecting === true
+        },
         State {
             name: "NORMAL"
             when: root.connectedSockets.length === 0
@@ -71,10 +109,6 @@ Rectangle {
         State {
             name: "CONNECTED"
             when: root.connectedSockets.length > 0
-        },
-        State {
-            name: "CONNECTING"
-            when: root.connecting === true
         }
     ]
 

@@ -49,10 +49,16 @@ Rectangle {
     }
 
     function socketEntered(socket) {
+        if(pendingConnection !== null)
+            pendingConnection.hoveringSocket = socket;
+
         canvas.requestPaint();
     }
 
     function socketExited(socket) {
+        if(pendingConnection !== null)
+            pendingConnection.hoveringSocket = null;
+
         canvas.requestPaint();
     }
 
@@ -98,6 +104,7 @@ Rectangle {
     function disconnectFromMouse() {
         if(root.pendingConnection)
         {
+            root.pendingConnection.hoveringSocket = null;
             root.pendingConnection.socket.connecting = false;
             root.pendingConnection = null;
             canvas.requestPaint();

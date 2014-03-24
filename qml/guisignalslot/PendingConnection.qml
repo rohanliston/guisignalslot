@@ -2,11 +2,38 @@ import QtQuick 2.0
 
 Item {
     id: root
+    onHoveringSocketChanged: {
+        if(hoveringSocket !== null && canConnectTo(hoveringSocket)) {
+            socket.potentialConnectionHovering = true;
+            socket.invalidConnectionHovering = false;
+        } else if(hoveringSocket !== null && !canConnectTo(hoveringSocket)) {
+            socket.potentialConnectionHovering = false;
+            socket.invalidConnectionHovering = true;
+        } else {
+            socket.potentialConnectionHovering = false;
+            socket.invalidConnectionHovering = false;
+        }
+    }
 
     property Item socket
+    property Item hoveringSocket
 
     property real curveScale: 0.5
-    property color color: socket !== null ? socket.connectingColor : "GRAY"
+    property color color: {
+        var result = "GRAY";
+
+        if(socket !== null)
+        {
+            if(hoveringSocket !== null && canConnectTo(hoveringSocket))
+                result = socket.potentialConnectionColor;
+            else if(hoveringSocket !== null && !canConnectTo(hoveringSocket))
+                result = "RED";
+            else
+                result = socket.connectingColor;
+        }
+
+        return result;
+    }
 
     function canConnectTo(otherSocket) {
         return root.socket.canConnectTo(otherSocket);
