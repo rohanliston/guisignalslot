@@ -4,7 +4,21 @@ Rectangle {
     id: root
     width: 15
     height: 15
-    color: defaultColor
+    color: {
+        var result;
+
+        if(isConnecting())
+            result = connectingColor;
+        else if(isConnected())
+            result = connectedColor;
+        else
+            result = defaultColor;
+
+        if(hovering)
+            result = Qt.lighter(result);
+
+        return result;
+    }
 
     property string name: "Unnamed Socket"
     property string type: "socket"
@@ -13,8 +27,10 @@ Rectangle {
     property bool connecting: false
 
     property color defaultColor: "GRAY"
-    property color connectingColor: Qt.lighter(defaultColor)
+    property color connectingColor: "GRAY"
     property color connectedColor: "GREEN"
+    property bool connecting: false
+    property bool hovering: false
 
     signal clicked
     signal entered
