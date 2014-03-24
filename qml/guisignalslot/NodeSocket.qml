@@ -20,6 +20,14 @@ Rectangle {
     signal exited
     signal mouseMoved(int x, int y)
 
+    function isInput() {
+        return root.objectName === "input";
+    }
+
+    function isOutput() {
+        return root.objectName === "output";
+    }
+
     state: "NORMAL"
     states: [
         State {
