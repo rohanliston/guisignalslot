@@ -196,7 +196,7 @@ Rectangle {
     Text {
         id: txtMousePos
         color: "RED"
-        anchors.right: parent.right
+        anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 10
         text: "(" + root.mouseX + "," + root.mouseY + ")";
