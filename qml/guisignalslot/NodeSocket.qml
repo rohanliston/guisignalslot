@@ -37,7 +37,7 @@ Rectangle {
         State {
             name: "HOVERING"
             when: root.hovering && !root.connecting
-            PropertyChanges { target: root; color: Qt.darker(root.initialColour) }
+            PropertyChanges { target: root; color: Qt.lighter(root.initialColour) }
         },
         State {
             name: "CONNECTING"
