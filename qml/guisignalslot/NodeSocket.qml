@@ -12,8 +12,9 @@ Rectangle {
     property bool hovering: false
     property bool connecting: false
 
-    property color initialColour
-    Component.onCompleted: initialColour = color;
+    property color defaultColor
+    property color connectingColor: Qt.lighter("GRAY")  // @TODO: Replace with whatever the result of this is
+    property color connectedColor: "GREEN"
 
     signal clicked
     signal entered
@@ -41,7 +42,7 @@ Rectangle {
         State {
             name: "HOVERING"
             when: root.hovering && !root.connecting
-            PropertyChanges { target: root; color: Qt.lighter(root.initialColour) }
+            PropertyChanges { target: root; color: Qt.lighter(root.defaultColor) }
         },
         State {
             name: "CONNECTING"
