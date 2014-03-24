@@ -7,7 +7,7 @@ Item {
     property Item outputSocket
 
     property real curveScale: 0.5
-    property color color: inputSocket !== null ? inputSocket.color : "GRAY"
+    property color color: inputSocket !== null ? inputSocket.connectedColor : "GREEN"
 
     signal mouseHover
 
