@@ -28,6 +28,10 @@ Rectangle {
         return root.objectName === "output";
     }
 
+    function canConnectTo(otherSocket) {
+        return (isInput() && otherSocket.isOutput()) || (isOutput() && otherSocket.isInput());
+    }
+
     state: "NORMAL"
     states: [
         State {
