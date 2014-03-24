@@ -7,7 +7,22 @@ Item {
     property Item outputSocket
 
     property real curveScale: 0.5
-    property color color: inputSocket !== null ? inputSocket.connectedColor : "GREEN"
+    property color color: {
+        var result;
+        if(outputSocket !== null && inputSocket !== null) {
+            if(outputSocket.hovering)
+                result = outputSocket.color;
+            else if(inputSocket.hovering)
+                result = inputSocket.color;
+            else
+                result = outputSocket.connectedColor;
+        }
+        else {
+            result = "GRAY";
+        }
+
+        return result;
+    }
 
     signal mouseHover
 
