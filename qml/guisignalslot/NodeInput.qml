@@ -1,16 +1,17 @@
 import QtQuick 2.0
 
 NodeSocket {
+    id: root
     anchors.right: parent.left
     name: "Unnamed Input"
-    color: "#FF9933"
     objectName: "input"
 
     Text {
-        id: inputNameText
+        id: txtInput
         anchors.left: parent.right
         anchors.leftMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         text: name
+        color: root.color
     }
 }

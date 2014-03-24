@@ -1,16 +1,17 @@
 import QtQuick 2.0
 
 NodeSocket {
+    id: root
     anchors.left: parent.right
     name: "Unnamed Output"
-    color: "#3399FF"
     objectName: "output"
 
     Text {
-        id: outputNameText
+        id: txtOutputName
         anchors.right: parent.left
         anchors.rightMargin: 5
         anchors.verticalCenter: parent.verticalCenter
         text: name
+        color: root.color
     }
 }
