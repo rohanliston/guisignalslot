@@ -132,7 +132,7 @@ Rectangle {
             if(root.connectingSocket !== null)
             {
                 var direction = root.connectingSocket.objectName === "input" ? -1 : 1;
-                var socketPos = mapFromItem(root.connectingSocket, root.connectingSocket.width/2, root.connectingSocket.height/2);
+                var socketPos = mapFromItem(root.connectingSocket, root.connectingSocket.width / 2, root.connectingSocket.height / 2);
 
                 drawConnection(socketPos.x, socketPos.y, mouseX, mouseY, direction, 0.5);
             }
@@ -186,9 +186,9 @@ Rectangle {
         onWheel: {
             if (wheel.modifiers & Qt.ControlModifier) {
                 if (wheel.angleDelta.y > 0)
-                    root.scaleFactor*=1.1;
+                    root.scaleFactor *= 1.1;
                 else
-                    root.scaleFactor*=0.9;
+                    root.scaleFactor *= 0.9;
             }
         }
     }

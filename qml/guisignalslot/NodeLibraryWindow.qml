@@ -6,11 +6,9 @@ Rectangle {
 
     color: "lightgray"
     height: parent.height
-    Behavior on width { NumberAnimation {duration: 150}}
+    Behavior on width { NumberAnimation { duration: 150 } }
     clip: true
-    onWidthChanged: {
-        parent.update()
-    }
+    onWidthChanged: parent.update()
 
     state: "MAXIMISED"
     states: [
@@ -30,11 +28,12 @@ Rectangle {
 
     Column {
         anchors.fill: parent
+
         Rectangle {
             id: titleBar
             height: 30
             width: parent.width
-            color: "darkgray"
+            color: "DARKGRAY"
             Button {
                 id: sizeButton
                 x: 2
@@ -43,7 +42,7 @@ Rectangle {
                 height: 20
                 text: "-"
                 onClicked: {
-                    root.state=="MINIMISED" ? root.state="MAXIMISED" : root.state="MINIMISED";
+                    root.state = (root.state === "MINIMISED" ? "MAXIMISED" : "MINIMISED");
                 }
             }
 
@@ -52,7 +51,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 x: 60
                 text: "COMPONENT LIST"
-                color: "white"
+                color: "WHITE"
             }
         }
 
@@ -60,7 +59,7 @@ Rectangle {
             id: shim
             height: 2
             width: parent.width
-            color: "lightgray"
+            color: "LIGHTGRAY"
         }
 
         Column {
@@ -70,14 +69,15 @@ Rectangle {
 
             Button {
                 id: btnAddNode
-                width: parent.width-24-1
+                width: parent.width - 24 - 1
                 x: 25
+                onClicked: editorWindow.addNode()
+
                 Text {
                     x: 15
                     text: "Test Class"
                     anchors.verticalCenter: parent.verticalCenter
                 }
-                onClicked: editorWindow.addNode()
             }
         }
     }

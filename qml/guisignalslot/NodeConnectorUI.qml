@@ -15,8 +15,9 @@ Rectangle {
         }
 
         Rectangle {
-            width: parent.width-libraryWindow.width
+            width: parent.width - libraryWindow.width
             height: root.height
+
             Flickable {
                 id: view
                 width: parent.width
@@ -39,7 +40,7 @@ Rectangle {
                 orientation: 'Vertical'
                 position: view.visibleArea.yPosition
                 pageSize: view.visibleArea.heightRatio
-                onSetPositionChanged: view.contentY=setPosition * (view.contentHeight-view.height);
+                onSetPositionChanged: view.contentY = setPosition * (view.contentHeight - view.height);
             }
 
             ScrollBar {
@@ -50,10 +51,11 @@ Rectangle {
                 orientation: 'Horizontal'
                 position: view.visibleArea.xPosition
                 pageSize: view.visibleArea.widthRatio
-                onSetPositionChanged: view.contentX=setPosition * (view.contentWidth-view.width);
+                onSetPositionChanged: view.contentX = setPosition * (view.contentWidth - view.width);
             }
         }
     }
+
     Button {
         id: zoomIn
         anchors.right: parent.right
@@ -63,8 +65,9 @@ Rectangle {
         width: 25
         height: 25
         text: "+"
-        onClicked: editorWindow.scaleFactor*=1.25
+        onClicked: editorWindow.scaleFactor *= 1.25
     }
+
     Button {
         id: zoomOut
         anchors.right: zoomIn.left
@@ -73,6 +76,6 @@ Rectangle {
         width: 25
         height: 25
         text: "-"
-        onClicked: editorWindow.scaleFactor*=0.8
+        onClicked: editorWindow.scaleFactor *= 0.8
     }
 }
