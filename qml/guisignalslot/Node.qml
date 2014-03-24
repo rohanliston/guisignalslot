@@ -2,20 +2,17 @@ import QtQuick 2.0
 import ComponentConnector 1.0
 import TestClass 1.0
 
-Rectangle {
+Item {
     id: root
     width: 360
     height: 360
     x: 360
-    color: "TRANSPARENT"
     clip: false
 
     property variant inputs: []
     property variant outputs: []
     readonly property variant sockets: inputs.concat(outputs)
     property variant connections: []
-
-    property Item ui
 
     signal clicked(Item node)
     signal entered(Item node)
