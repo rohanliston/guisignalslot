@@ -14,7 +14,7 @@ Rectangle {
 
     property variant nodes: []
     property variant connections: []
-    property Item connectingSocket
+    property Item pendingConnection
 
     property Canvas canvas: canvas
 
@@ -57,29 +57,45 @@ Rectangle {
     }
 
     function socketClicked(socket) {
-//        console.log("Socket clicked: " + socket);
+        var isOutputSocket = (socket.objectName === "output");
 
-        if(connectingSocket === null)
-        {
-            console.log("Starting connection from " + socket);
-            connectingSocket = socket;
-            connectingSocket.connecting = true;
-        }
-        else
-        {
-            var connectionList = root.connections;
+        if(pendingConnection === null) {
+            var newConnection = Qt.createComponent("Connection.qml");
+            var instance = newConnection.createObject(root);
 
-            console.log("Connecting " + connectingSocket + " to " + socket);
-            connectionList.push({"from": connectingSocket, "to": socket});
-            connections = connectionList;
-            cancelCurrentConnection();
+            if(isOutputSocket)
+                instance.outputSocket = socket;
+            else
+                instance.inputSocket = socket;
+
+            instance.isPending = true;
+            root.pendingConnection = instance;
+        } else {
+            if(pendingConnection.canConnect(socket)) {
+                if(isOutputSocket)
+                    root.pendingConnection.outputSocket = socket;
+                else
+                    root.pendingConnection.inputSocket = socket;
+
+                var connectionList = root.connections;
+                connectionList.push(root.pendingConnection);
+                root.connections = connectionList;
+                disconnectFromMouse();
+            }
+            else {
+                console.log("Invalid connection!");
+            }
         }
+
+        canvas.requestPaint();
     }
 
     /*! Cancels the connection currently being made by the mouse. */
-    function cancelCurrentConnection() {
-        connectingSocket.connecting = false;
-        connectingSocket = null;
+    function disconnectFromMouse() {
+        if(root.pendingConnection !== null) {
+            root.pendingConnection.isPending = false;
+            root.pendingConnection = null;
+        }
     }
 
     signal nodePositionChanged
@@ -108,20 +124,6 @@ Rectangle {
         anchors.fill: parent
         z: 1
 
-        function drawConnection(x1, y1, x2, y2, direction, scale) {
-            var ctrlPtDist = Math.abs(x2 - x1) * scale * direction;
-
-            var ctrlPt1X = x1 + ctrlPtDist;
-            var ctrlPt1Y = y1;
-            var ctrlPt2X = x2 - ctrlPtDist;
-            var ctrlPt2Y = y2;
-
-            context.beginPath();
-            context.moveTo(x1, y1);
-            context.bezierCurveTo(ctrlPt1X, ctrlPt1Y, ctrlPt2X, ctrlPt2Y, x2, y2);
-            context.stroke();
-        }
-
         onPaint: {
             if(!context)
                 getContext("2d");
@@ -129,25 +131,16 @@ Rectangle {
             context.clearRect(0, 0, width, height);
 
             // If we're currently connecting something, draw it.
-            if(root.connectingSocket !== null)
-            {
-                var direction = root.connectingSocket.objectName === "input" ? -1 : 1;
-                var socketPos = mapFromItem(root.connectingSocket, root.connectingSocket.width / 2, root.connectingSocket.height / 2);
-
-                drawConnection(socketPos.x, socketPos.y, mouseX, mouseY, direction, 0.5);
+            if(root.pendingConnection !== null) {
+                root.pendingConnection.mouseX = root.mouseX;
+                root.pendingConnection.mouseY = root.mouseY;
+                root.pendingConnection.draw(context);
             }
 
             // Draw all other connections.
             for(var i = 0; i < root.connections.length; ++i)
             {
-                direction = root.connections[i]["from"].objectName === "input" ? -1 : 1;
-                var source = root.connections[i]["from"];
-                var dest = root.connections[i]["to"];
-
-                var sourcePos = mapFromItem(source, source.width/2, source.height/2);
-                var destPos = mapFromItem(dest, dest.width/2, dest.height/2);
-
-                drawConnection(sourcePos.x, sourcePos.y, destPos.x, destPos.y, direction, 0.5);
+                root.connections[i].draw(context);
             }
         }
     }
@@ -178,7 +171,7 @@ Rectangle {
         onPressed: {
             if(pressedButtons & Qt.RightButton)
             {
-                cancelCurrentConnection();
+                disconnectFromMouse();
                 canvas.requestPaint();
             }
         }
