@@ -17,10 +17,15 @@ Rectangle {
 
     property Item ui
 
+    signal clicked(Item node)
+    signal entered(Item node)
+    signal exited(Item node)
+
     signal socketClicked(Item socket)
-    signal mouseMovedOverNode(Item node, int x, int y)
-    signal mouseMovedOverSocket(Item socket, int x, int y)
-    signal positionChanged
+    signal socketEntered(Item socket)
+    signal socketExited(Item socket)
+
+    signal mouseMoved(Item mouseArea, int x, int y)
 
     ComponentConnector {
         id: connector
@@ -56,8 +61,10 @@ Rectangle {
                     name: connector.customSlotNames[index]
                     y: nodeBox.socketOffset + (index * 30)
                     parent: nodeBox
-                    onClicked: socketClicked(this)
-                    onMousePositionChanged: root.mouseMovedOverSocket(this, x, y)
+                    onClicked: root.socketClicked(this)
+                    onEntered: root.socketEntered(this)
+                    onExited: root.socketExited(this)
+                    onMouseMoved: root.mouseMoved(this, x, y)
 
                     Component.onCompleted: {
                         var socketList = inputs;
@@ -76,8 +83,10 @@ Rectangle {
                     name: connector.customSignalNames[index]
                     y: nodeBox.socketOffset + (index * 30)
                     parent: nodeBox
-                    onClicked: socketClicked(this)
-                    onMousePositionChanged: root.mouseMovedOverSocket(this, x, y)
+                    onClicked: root.socketClicked(this)
+                    onEntered: root.socketEntered(this)
+                    onExited: root.socketExited(this)
+                    onMouseMoved: root.mouseMoved(this, x, y)
 
                     Component.onCompleted: {
                         var socketList = outputs;
@@ -97,9 +106,15 @@ Rectangle {
                 drag.minimumY: 0
                 drag.maximumY: root.parent.height //- root.height
                 propagateComposedEvents: true
+                hoverEnabled: true
+                onEntered: root.entered(root);
+                onExited: root.exited(root);
+                onClicked: root.clicked(root);
                 onPositionChanged: {
-                    root.mouseMovedOverNode(this, mouseX, mouseY)
-                    root.parent.nodePositionChanged()
+                    root.mouseMoved(this, mouseX, mouseY)
+
+                    if(pressed)
+                        root.parent.nodePositionChanged()
                 }
             }
         }

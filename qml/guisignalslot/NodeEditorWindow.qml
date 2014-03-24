@@ -21,15 +21,65 @@ Rectangle {
     function addNode() {
         // Create a new node.
         var node = Qt.createComponent("Node.qml");
-        var instance = node.createObject(editorWindow);
-        instance.onSocketClicked.connect(editorWindow.socketClicked);
-        instance.onMouseMovedOverNode.connect(editorWindow.mouseMovedOverNode);
-        instance.onMouseMovedOverSocket.connect(editorWindow.mouseMovedOverSocket);
+        var instance = node.createObject(root);
+        instance.onEntered.connect(root.nodeEntered);
+        instance.onExited.connect(root.nodeExited);
+        instance.onClicked.connect(root.nodeClicked);
+        instance.onSocketEntered.connect(root.socketEntered);
+        instance.onSocketExited.connect(root.socketExited);
+        instance.onSocketClicked.connect(root.socketClicked);
+        instance.onMouseMoved.connect(mouseArea.occludingMouseAreaUpdate);
 
         // Add it to the list.
         var nodeList = nodes;
         nodeList.push(instance);
         nodes = nodeList;
+    }
+
+    function nodeEntered(node) {
+//        console.log("Node entered: " + node);
+    }
+
+    function nodeExited(node) {
+//        console.log("Node exited: " + node);
+    }
+
+    function nodeClicked(node) {
+//        console.log("Node clicked: " + node);
+    }
+
+    function socketEntered(socket) {
+//        console.log("Socket entered: " + socket);
+    }
+
+    function socketExited(socket) {
+//        console.log("Socket exited: " + socket);
+    }
+
+    function socketClicked(socket) {
+//        console.log("Socket clicked: " + socket);
+
+        if(connectingSocket === null)
+        {
+            console.log("Starting connection from " + socket);
+            connectingSocket = socket;
+            connectingSocket.connecting = true;
+        }
+        else
+        {
+            var connectionList = root.connections;
+
+            console.log("Connecting " + connectingSocket + " to " + socket);
+            connectionList.push({"from": connectingSocket, "to": socket});
+            connections = connectionList;
+            cancelCurrentConnection();
+        }
+    }
+
+    /*! Cancels the connection currently being made by the mouse. */
+    function cancelCurrentConnection() {
+        connectingSocket.connecting = false;
+        connectingSocket = null;
     }
 
     signal nodePositionChanged
@@ -51,38 +101,6 @@ Rectangle {
 
         if (maxX > 1024) root.width = maxX;
         if (maxY > 720) root.height = maxY;
-    }
-
-    function socketClicked(socket) {
-        if(connectingSocket === null)
-        {
-            console.log("Starting connection from " + socket);
-            connectingSocket = socket;
-            connectingSocket.connecting = true;
-        }
-        else
-        {
-            var connectionList = root.connections;
-
-            console.log("Connecting " + connectingSocket + " to " + socket);
-            connectionList.push({"from": connectingSocket, "to": socket});
-            connections = connectionList;
-            cancelCurrentConnection();
-        }
-    }
-
-    // @TODO: No longer necessary to have separate functions for this.
-    function mouseMovedOverNode(node, x, y) {
-        mouseArea.occludingMouseAreaUpdate(node, x, y);
-    }
-    function mouseMovedOverSocket(socket, x, y) {
-        mouseArea.occludingMouseAreaUpdate(socket, x, y);
-    }
-
-    /*! Cancels the connection currently being made by the mouse. */
-    function cancelCurrentConnection() {
-        connectingSocket.connecting = false;
-        connectingSocket = null;
     }
 
     Canvas {

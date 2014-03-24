@@ -16,7 +16,9 @@ Rectangle {
     Component.onCompleted: initialColour = color;
 
     signal clicked
-    signal mousePositionChanged(Item item, int x, int y)
+    signal entered
+    signal exited
+    signal mouseMoved(int x, int y)
 
     state: "NORMAL"
     states: [
@@ -41,9 +43,15 @@ Rectangle {
         anchors.fill: root
         hoverEnabled: true
         propagateComposedEvents: true
-        onEntered: root.hovering = true
-        onExited: root.hovering = false
+        onEntered: {
+            root.hovering = true;
+            root.entered();
+        }
+        onExited: {
+            root.hovering = false;
+            root.exited();
+        }
         onClicked: root.clicked();
-        onPositionChanged: root.mousePositionChanged(root, mouseX, mouseY)
+        onPositionChanged: root.mouseMoved(mouseX, mouseY)
     }
 }
