@@ -29,6 +29,14 @@ Rectangle {
         return root.objectName === "output";
     }
 
+    function isConnecting() {
+        return state === "CONNECTING";
+    }
+
+    function isConnected() {
+        return state === "CONNECTED";
+    }
+
     function canConnectTo(otherSocket) {
         return (isInput() && otherSocket.isOutput()) || (isOutput() && otherSocket.isInput());
     }
