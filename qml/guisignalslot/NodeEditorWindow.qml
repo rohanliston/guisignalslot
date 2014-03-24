@@ -62,45 +62,41 @@ Rectangle {
     }
 
     function socketClicked(socket) {
-        var isOutputSocket = (socket.objectName === "output");
-
-        if(pendingConnection === null) {
-            var newConnection = Qt.createComponent("Connection.qml");
-            var instance = newConnection.createObject(root);
-
-            if(isOutputSocket)
-                instance.outputSocket = socket;
-            else
-                instance.inputSocket = socket;
-
-            instance.isPending = true;
-            root.pendingConnection = instance;
-        } else {
-            if(pendingConnection.canConnect(socket)) {
-                if(isOutputSocket)
-                    root.pendingConnection.outputSocket = socket;
-                else
-                    root.pendingConnection.inputSocket = socket;
-
-                var connectionList = root.connections;
-                connectionList.push(root.pendingConnection);
-                root.connections = connectionList;
-                disconnectFromMouse();
-            }
-            else {
-                console.log("Invalid connection!");
-            }
-        }
+        if(root.pendingConnection === null)
+            beginConnection(socket);
+        else
+            completeConnection(socket);
 
         canvas.requestPaint();
     }
 
-    /*! Cancels the connection currently being made by the mouse. */
-    function disconnectFromMouse() {
-        if(root.pendingConnection !== null) {
-            root.pendingConnection.isPending = false;
-            root.pendingConnection = null;
+    function beginConnection(sourceSocket) {
+        var pendingConnectionComponent = Qt.createComponent("PendingConnection.qml");
+        var newPendingConnection = pendingConnectionComponent.createObject(root);
+        newPendingConnection.socket = sourceSocket;
+        root.pendingConnection = newPendingConnection;
+    }
+
+    function completeConnection(destSocket) {
+        if(root.pendingConnection.canConnectTo(destSocket)) {
+            var connectionComponent = Qt.createComponent("Connection.qml");
+            var newConnection = connectionComponent.createObject(root);
+
+            newConnection.inputSocket  = root.pendingConnection.socket.isInput() ? root.pendingConnection.socket : destSocket;
+            newConnection.outputSocket = root.pendingConnection.socket.isOutput() ? root.pendingConnection.socket : destSocket;;
+
+            var connectionList = root.connections;
+            connectionList.push(newConnection);
+            root.connections = connectionList;
+            disconnectFromMouse();
         }
+        else {
+            console.log("Invalid connection!");
+        }
+    }
+
+    function disconnectFromMouse() {
+        root.pendingConnection = null;
     }
 
     signal nodePositionChanged
@@ -137,9 +133,7 @@ Rectangle {
 
             // If we're currently connecting something, draw it.
             if(root.pendingConnection !== null) {
-                root.pendingConnection.mouseX = root.mouseX;
-                root.pendingConnection.mouseY = root.mouseY;
-                root.pendingConnection.draw(context);
+                root.pendingConnection.draw(context, root.mouseX, root.mouseY);
             }
 
             // Draw all other connections.

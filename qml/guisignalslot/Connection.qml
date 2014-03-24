@@ -7,29 +7,13 @@ Item {
     property Item outputSocket
 
     property real curveScale: 0.5
-    property color color: "BLACK"
-    property bool isPending: false
-
-    property real mouseX
-    property real mouseY
+    property color color: inputSocket !== null ? inputSocket.color : "GRAY"
 
     signal mouseHover
 
-    function canConnect(otherSocket) {
-        return (otherSocket.isOutput() && root.outputSocket === null) || (otherSocket.isInput() && root.inputSocket === null);
-    }
-
-    function hasInput() {
-        return root.inputSocket !== null;
-    }
-
-    function hasOutput() {
-        return root.outputSocket !== null;
-    }
-
     function draw(context) {
-        var outputPos = root.hasOutput() ? mapFromItem(root.outputSocket, root.outputSocket.width / 2, root.outputSocket.height / 2) : Qt.point(root.mouseX, root.mouseY);
-        var inputPos  = root.hasInput()  ? mapFromItem(root.inputSocket,  root.inputSocket.width / 2,  root.inputSocket.height / 2)  : Qt.point(root.mouseX, root.mouseY);
+        var outputPos = mapFromItem(root.outputSocket, root.outputSocket.width / 2, root.outputSocket.height / 2);
+        var inputPos  = mapFromItem(root.inputSocket,  root.inputSocket.width / 2,  root.inputSocket.height / 2);
 
         // Calculate control points.
         var ctrlPtDist = Math.abs(inputPos.x - outputPos.x) * root.curveScale;
