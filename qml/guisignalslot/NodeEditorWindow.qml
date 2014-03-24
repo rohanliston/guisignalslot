@@ -37,27 +37,22 @@ Rectangle {
     }
 
     function nodeEntered(node) {
-//        console.log("Node entered: " + node);
         canvas.requestPaint();
     }
 
     function nodeExited(node) {
-//        console.log("Node exited: " + node);
         canvas.requestPaint();
     }
 
     function nodeClicked(node) {
-//        console.log("Node clicked: " + node);
         canvas.requestPaint();
     }
 
     function socketEntered(socket) {
-//        console.log("Socket entered: " + socket);
         canvas.requestPaint();
     }
 
     function socketExited(socket) {
-//        console.log("Socket exited: " + socket);
         canvas.requestPaint();
     }
 
