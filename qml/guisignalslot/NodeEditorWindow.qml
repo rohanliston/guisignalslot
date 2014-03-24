@@ -75,6 +75,7 @@ Rectangle {
         var newPendingConnection = pendingConnectionComponent.createObject(root);
         newPendingConnection.socket = sourceSocket;
         root.pendingConnection = newPendingConnection;
+        sourceSocket.connecting = true;
     }
 
     function completeConnection(destSocket) {
@@ -96,7 +97,12 @@ Rectangle {
     }
 
     function disconnectFromMouse() {
-        root.pendingConnection = null;
+        if(root.pendingConnection)
+        {
+            root.pendingConnection.socket.connecting = false;
+            root.pendingConnection = null;
+            canvas.requestPaint();
+        }
     }
 
     signal nodePositionChanged
@@ -132,9 +138,8 @@ Rectangle {
             context.clearRect(0, 0, width, height);
 
             // If we're currently connecting something, draw it.
-            if(root.pendingConnection !== null) {
+            if(root.pendingConnection !== null)
                 root.pendingConnection.draw(context, root.mouseX, root.mouseY);
-            }
 
             // Draw all other connections.
             for(var i = 0; i < root.connections.length; ++i)
