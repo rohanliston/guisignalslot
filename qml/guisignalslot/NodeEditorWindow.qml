@@ -2,8 +2,12 @@ import QtQuick 2.0
 
 Rectangle {
     id: root
-    width: 1280
+    width: 1024
     height: 720
+    color: "#FFFFDD"
+
+    property real scaleFactor: 1.0
+    transform: Scale { origin.x: 0; origin.y: 0; xScale: root.scaleFactor; yScale: root.scaleFactor}
 
     property int mouseX
     property int mouseY
@@ -26,6 +30,27 @@ Rectangle {
         var nodeList = nodes;
         nodeList.push(instance);
         nodes = nodeList;
+    }
+
+    signal nodePositionChanged
+    onNodePositionChanged: {
+        for (var i = 0, size = nodes.length; i < size; i++)
+        {
+            var node = nodes[i];
+
+            var maxX = 0
+            var maxY = 0
+
+            if (node.x + node.width > maxX) {
+                maxX = node.x + node.width;
+            }
+            if (node.y + node.height > maxY) {
+                maxY = node.y + node.height;
+            }
+        }
+
+        if (maxX > 1024) root.width = maxX;
+        if (maxY > 720) root.height = maxY;
     }
 
     function socketClicked(socket) {
@@ -137,6 +162,15 @@ Rectangle {
             {
                 cancelCurrentConnection();
                 canvas.requestPaint();
+            }
+        }
+
+        onWheel: {
+            if (wheel.modifiers & Qt.ControlModifier) {
+                if (wheel.angleDelta.y > 0)
+                    root.scaleFactor*=1.1;
+                else
+                    root.scaleFactor*=0.9;
             }
         }
     }

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QString>
+#include <QQuickItem>
 
 class TestClass : public QObject
 {
@@ -37,5 +38,7 @@ public slots:
     void customSlot() { qDebug() << "Custom slot triggered!"; }
     void customSlotWithArgs(QString arg) { qDebug() << "Custom slot triggered with argument" << arg << "!"; }
 };
+
+QML_DECLARE_TYPE(TestClass)
 
 #endif // TESTCLASS_H

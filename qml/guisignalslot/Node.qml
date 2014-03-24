@@ -1,10 +1,12 @@
 import QtQuick 2.0
 import ComponentConnector 1.0
+import TestClass 1.0
 
 Rectangle {
     id: root
     width: 360
     height: 360
+    x: 360
     color: "TRANSPARENT"
     clip: false
 
@@ -18,10 +20,12 @@ Rectangle {
     signal socketClicked(Item socket)
     signal mouseMovedOverNode(Item node, int x, int y)
     signal mouseMovedOverSocket(Item socket, int x, int y)
+    signal positionChanged
 
     ComponentConnector {
         id: connector
         componentName: "TestClass"
+        targetObject: TestClass {}
         anchors.fill: parent
 
         Rectangle {
@@ -89,11 +93,14 @@ Rectangle {
                 drag.target: root
                 drag.axis: Drag.XAndYAxis
                 drag.minimumX: 0
-                drag.maximumX: root.parent.width - root.width
+                drag.maximumX: root.parent.width //- root.width
                 drag.minimumY: 0
-                drag.maximumY: root.parent.height - root.height
+                drag.maximumY: root.parent.height //- root.height
                 propagateComposedEvents: true
-                onPositionChanged: root.mouseMovedOverNode(this, mouseX, mouseY)
+                onPositionChanged: {
+                    root.mouseMovedOverNode(this, mouseX, mouseY)
+                    root.parent.nodePositionChanged()
+                }
             }
         }
     }
