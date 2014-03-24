@@ -23,8 +23,7 @@ Rectangle {
     property string name: "Unnamed Socket"
     property string type: "socket"
 
-    property bool hovering: false
-    property bool connecting: false
+    property variant connectedSockets: []
 
     property color defaultColor: "GRAY"
     property color connectingColor: "GRAY"
@@ -57,21 +56,25 @@ Rectangle {
         return (isInput() && otherSocket.isOutput()) || (isOutput() && otherSocket.isInput());
     }
 
+    function addConnection(socket) {
+        var connectionList = root.connectedSockets;
+        connectionList.push(socket);
+        root.connectedSockets = connectionList;
+    }
+
     state: "NORMAL"
     states: [
         State {
             name: "NORMAL"
-            when: !root.hovering && !root.connecting
+            when: root.connectedSockets.length === 0
         },
         State {
-            name: "HOVERING"
-            when: root.hovering && !root.connecting
-            PropertyChanges { target: root; color: Qt.lighter(root.defaultColor) }
+            name: "CONNECTED"
+            when: root.connectedSockets.length > 0
         },
         State {
             name: "CONNECTING"
-            when: root.connecting
-            PropertyChanges { target: root; color: root.connectingColor }
+            when: root.connecting === true
         }
     ]
 

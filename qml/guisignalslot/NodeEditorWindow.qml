@@ -89,6 +89,10 @@ Rectangle {
             var connectionList = root.connections;
             connectionList.push(newConnection);
             root.connections = connectionList;
+
+            newConnection.inputSocket.addConnection(newConnection.outputSocket);
+            newConnection.outputSocket.addConnection(newConnection.inputSocket);
+
             disconnectFromMouse();
         }
         else {
