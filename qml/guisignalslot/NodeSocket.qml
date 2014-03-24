@@ -4,7 +4,7 @@ Rectangle {
     id: root
     width: 15
     height: 15
-    color: "GRAY"
+    color: defaultColor
 
     property string name: "Unnamed Socket"
     property string type: "socket"
@@ -12,8 +12,8 @@ Rectangle {
     property bool hovering: false
     property bool connecting: false
 
-    property color defaultColor
-    property color connectingColor: Qt.lighter("GRAY")  // @TODO: Replace with whatever the result of this is
+    property color defaultColor: "GRAY"
+    property color connectingColor: Qt.lighter(defaultColor)
     property color connectedColor: "GREEN"
 
     signal clicked
@@ -47,7 +47,7 @@ Rectangle {
         State {
             name: "CONNECTING"
             when: root.connecting
-            PropertyChanges { target: root; color: "BLACK" }
+            PropertyChanges { target: root; color: root.connectingColor }
         }
     ]
 
