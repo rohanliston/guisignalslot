@@ -29,6 +29,30 @@ Item {
 
     signal mouseMoved(Item mouseArea, int x, int y)
 
+    function select() {
+        state = "SELECTED";
+    }
+
+    function deselect() {
+        state = "DESELECTED";
+    }
+
+    function isSelected() {
+        return state === "SELECTED";
+    }
+
+    state: "DESELECTED"
+    states: [
+        State {
+            name: "SELECTED"
+            PropertyChanges { target: nodeBox; border.color: "ORANGE" }
+            PropertyChanges { target: txtNodeHeading; color: "ORANGE" }
+        },
+        State {
+            name: "DESELECTED"
+        }
+    ]
+
     ComponentConnector {
         id: connector
         componentName: "TestClass"
@@ -46,6 +70,7 @@ Item {
 
             // Node heading.
             Text {
+                id: txtNodeHeading
                 anchors.top: parent.top
                 anchors.topMargin: 20
                 anchors.horizontalCenter: parent.horizontalCenter
