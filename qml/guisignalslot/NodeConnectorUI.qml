@@ -1,10 +1,15 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.1
+import "FontAwesome.js" as FontAwesome
 
 Rectangle {
     id: root
     width: 1280
     height: 720
+
+    FontLoader {
+        source: "resources/fontawesome-webfont.ttf"
+    }
 
     Row {
         anchors.fill: parent
@@ -56,26 +61,28 @@ Rectangle {
         }
     }
 
-    Button {
-        id: zoomIn
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.rightMargin: 15
-        anchors.topMargin: 5
-        width: 25
-        height: 25
-        text: "+"
-        onClicked: editorWindow.scaleFactor *= 1.25
-    }
+            Button {
+                id: zoomIn
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.rightMargin: 15
+                anchors.topMargin: 5
+                width: 25
+                height: 25
+                onClicked: editorWindow.scaleFactor *= 1.25
+                text: FontAwesome.Icon.ZoomIn
+            }
 
-    Button {
-        id: zoomOut
-        anchors.right: zoomIn.left
-        anchors.top: parent.top
-        anchors.topMargin: 5
-        width: 25
-        height: 25
-        text: "-"
-        onClicked: editorWindow.scaleFactor *= 0.8
+            Button {
+                id: zoomOut
+                anchors.right: zoomIn.left
+                anchors.top: parent.top
+                anchors.topMargin: 5
+                width: 25
+                height: 25
+                onClicked: editorWindow.scaleFactor *= 0.8
+                text: FontAwesome.Icon.ZoomOut
+            }
+        }
     }
 }
