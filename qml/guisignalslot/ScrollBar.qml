@@ -49,7 +49,7 @@ Item {
     // Size the bar to the required size, depending upon the orientation.
     Rectangle {
         id: slider
-        opacity: 0.7
+        opacity: 0.3
         color: "black"
         radius: orientation == 'Vertical' ? (width/2 - 1) : (height/2 - 1)
         x:      orientation == 'Vertical' ? 1 : (scrollBar.position * (scrollBar.width - 2) + 1)
