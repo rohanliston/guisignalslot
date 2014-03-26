@@ -4,7 +4,6 @@ Rectangle {
     id: root
     width: 1024
     height: 720
-    color: "#FFFFDD"
 
     property real scaleFactor: 1.0
     transform: Scale { origin.x: 0; origin.y: 0; xScale: root.scaleFactor; yScale: root.scaleFactor}
