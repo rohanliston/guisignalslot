@@ -9,6 +9,11 @@ Item {
     x: 360
     clip: false
 
+    property alias customSignalNames: connector.customSignalNames
+    property alias customSlotNames: connector.customSlotNames
+    property alias customPropertyNames: connector.customPropertyNames
+    property alias inheritedPropertyNames: connector.inheritedPropertyNames
+
     property variant inputs: []
     property variant outputs: []
     readonly property variant sockets: inputs.concat(outputs)
