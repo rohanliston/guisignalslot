@@ -15,6 +15,7 @@ Rectangle {
     property variant nodes: []
     property variant connections: []
     property Item pendingConnection
+    property Item selectedNode
 
     property Canvas canvas: canvas
 
@@ -45,6 +46,22 @@ Rectangle {
     }
 
     function nodeClicked(node) {
+        var selectedSameNode = (
+                    root.selectedNode !== null &&
+                    root.selectedNode === node &&
+                    root.selectedNode.isSelected()
+                    );
+
+        if(root.selectedNode !== null) {
+            root.selectedNode.deselect();
+            root.selectedNode = null;
+        }
+
+        if(!selectedSameNode) {
+            node.select();
+            root.selectedNode = node;
+        }
+
         canvas.requestPaint();
     }
 
@@ -192,6 +209,13 @@ Rectangle {
                     root.scaleFactor *= 1.1;
                 else
                     root.scaleFactor *= 0.9;
+            }
+        }
+
+        onClicked: {
+            if(root.selectedNode !== null) {
+                root.selectedNode.deselect();
+                root.selectedNode = null;
             }
         }
     }
