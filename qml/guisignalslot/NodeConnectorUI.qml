@@ -12,16 +12,19 @@ Rectangle {
     }
 
     Row {
-        anchors.fill: parent
+        id: row
+        anchors.fill: root
 
         NodeLibraryWindow {
             id: libraryWindow
-            width: root.width * 0.2
+            width: 200
+            height: row.height
         }
 
         Rectangle {
-            width: parent.width - libraryWindow.width
-            height: root.height
+            id: editorWindowComponents
+            width: row.width - libraryWindow.width - inspectorWindow.width
+            height: row.height
 
             Flickable {
                 id: view
@@ -33,6 +36,8 @@ Rectangle {
 
                 NodeEditorWindow {
                     id: editorWindow
+                    height: editorWindowComponents.height
+                    width: editorWindowComponents.width
                 }
             }
 
@@ -58,8 +63,6 @@ Rectangle {
                 pageSize: view.visibleArea.widthRatio
                 onSetPositionChanged: view.contentX = setPosition * (view.contentWidth - view.width);
             }
-        }
-    }
 
             Button {
                 id: zoomIn
@@ -83,6 +86,12 @@ Rectangle {
                 onClicked: editorWindow.scaleFactor *= 0.8
                 text: FontAwesome.Icon.ZoomOut
             }
+        }
+
+        NodeInspectorWindow {
+            id: inspectorWindow
+            width: 200
+            height: row.height
         }
     }
 }

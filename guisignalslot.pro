@@ -26,4 +26,5 @@ OTHER_FILES += \
     qml/guisignalslot/NodeInput.qml \
     qml/guisignalslot/Node.qml \
     qml/guisignalslot/NodeConnectorUI.qml \
+    qml/guisignalslot/NodeLibraryWindow.qml \
     qml/guisignalslot/FontAwesome.js
