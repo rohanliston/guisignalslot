@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import "FontAwesome.js" as FontAwesome
 
-Rectangle {
+DraggableRowItem {
     property int position: Item.Left
     property string title: "Untitled Drawer"
     property int resizeDuration: 150
