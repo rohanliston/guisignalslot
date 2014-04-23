@@ -6,17 +6,19 @@ Rectangle {
     id: root
     width: 1280
     height: 720
+    color: "darkgray"
 
     FontLoader {
         source: "resources/fontawesome-webfont.ttf"
     }
 
-    Row {
+    DraggableRow {
         id: row
         anchors.fill: root
 
         NodeLibraryWindow {
             id: libraryWindow
+            name: "libraryWindow"
             width: 200
             height: row.height
         }
@@ -90,6 +92,7 @@ Rectangle {
 
         NodeInspectorWindow {
             id: inspectorWindow
+            name: "inspectorWindow"
             width: 200
             height: row.height
         }

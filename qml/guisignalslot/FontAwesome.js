@@ -209,4 +209,6 @@ var Icon = {
     Unbrella            : "\uf0e9",
     Paste               : "\uf0ea",
     UserMd              : "\uf200",
+    Compress            : "\uf066",
+    Expand              : "\uf065",
 };
